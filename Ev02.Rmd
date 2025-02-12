@@ -1,0 +1,352 @@
+---
+title: "Evidencia 2 | Proyecto integrador"
+author: "Rodrigo Gomez"
+date: "`r Sys.Date()`"
+output: html_document
+---
+## 1.De las siguientes tres opciones, selecciona una opción para investigar:
+
+```
+Opcion elegida: Analizar las secuencias de SARS-CoV-2 reportadas en los 20 países con más casos reportados.
+
+Pais por numero de casos, mayor a menor: 
+1	USA	83,581,715
+2	India	43,105,222
+3	Brazil	30,564,536
+4	France	28,957,421
+5	Germany	25,345,357
+6	UK	22,114,034
+7	Russia	18,227,666
+8	S. Korea	17,544,398
+9	Italy	16,798,998
+10	Turkey	15,043,379
+11	Spain	12,009,059
+12	Vietnam	10,676,184
+13	Argentina	9,083,673
+14	Japan	8,058,591
+15	Netherlands	8,057,700
+16	Iran	7,225,189
+17	Australia	6,249,101
+18	Colombia	6,093,645
+19	Indonesia	6,048,431
+20	Poland	6,000,416
+
+Fuente:Worldometer. (s. f.). COVID Live - Coronavirus Statistics - Worldometer. Recuperado 8 de mayo de 2022, de https://www.worldometers.info/coronavirus/?utm_campaign=homeAdvegas1?
+```
+## 1.1 Cargamos las librerias necesarias
+```{r}
+library(Biostrings)
+library(seqinr)
+library(adegenet)
+library(ape)
+library(ggtree)
+library(DECIPHER)
+library(viridis)
+library(ggplot2)
+```
+
+## 1.2 Guardamos los codigos de acceso del sars-cov2 por pais, para saber su locacion
+```{r}
+sars_cov_2_USA <- ("ON429039.1")
+sars_cov_2_India <- ("ON063253.1")
+sars_cov_2_Brazil <- ("MZ477856.1")
+sars_cov_2_Francia <- ("ON365980.1")
+sars_cov_2_Alemania <- ("OW596186.1")
+sars_cov_2_ReinoUnido <- ("OW595942.1")
+sars_cov_2_Rusia <- ("ON380441.1")
+sars_cov_2_SurKorea <- ("MW466800.1")
+sars_cov_2_Italia <- ("OL989077.1")
+sars_cov_2_Turkia <- ("MW340907.1")
+sars_cov_2_Espana <- ("MT576025.1")
+sars_cov_2_Vietnam <- ("MT192773.1")
+sars_cov_2_Argentina <- ("OL989073.1")
+sars_cov_2_Japon <- ("BS000780.1")
+sars_cov_2_PaisesBajos <- ("MT396266.1")
+sars_cov_2_Iran <- ("MZ314342.1")
+sars_cov_2_Australia <- ("MZ410617.1")
+sars_cov_2_Colombia <- ("MT256924.2")
+sars_cov_2_Indonesia <- ("MZ570426.1")
+sars_cov_2_Polonia <- ("MT499209.1")
+
+virus <- c(sars_cov_2_USA,sars_cov_2_India,sars_cov_2_Brazil,sars_cov_2_Francia,sars_cov_2_Alemania,sars_cov_2_ReinoUnido,sars_cov_2_Rusia,sars_cov_2_SurKorea,sars_cov_2_Italia,sars_cov_2_Turkia,sars_cov_2_Espana,sars_cov_2_Vietnam,sars_cov_2_Argentina,sars_cov_2_Japon,sars_cov_2_PaisesBajos,sars_cov_2_Iran,sars_cov_2_Australia,sars_cov_2_Colombia,sars_cov_2_Indonesia,sars_cov_2_Polonia)
+
+virus_sequences <- read.GenBank(virus)
+USA <- read.GenBank("ON429039.1")
+India <- read.GenBank("ON063253.1")
+Brazil <- read.GenBank("MZ477856.1")
+Francia <- read.GenBank("ON365980.1")
+Alemania <- read.GenBank("OW596186.1")
+ReinoUnido <- read.GenBank("OW595942.1")
+Rusia <- read.GenBank("ON380441.1")
+SurKorea <- read.GenBank("MW466800.1")
+Italia <- read.GenBank("OL989077.1")
+Turkia <- read.GenBank("MW340907.1")
+Espana <- read.GenBank("MT576025.1")
+Vietnam <- read.GenBank("MT192773.1")
+Argentina <- read.GenBank("OL989073.1")
+Japon <- read.GenBank("BS000780.1")
+PaisesBajos <- read.GenBank("MT396266.1")
+Iran <- read.GenBank("MZ314342.1")
+Australia <- read.GenBank("MZ410617.1")
+Colombia <- read.GenBank("MT256924.2")
+Indonesia <- read.GenBank("MZ570426.1")
+Polonia <- read.GenBank("MT499209.1")
+
+
+
+```
+
+## 2.Calcula la longitud de las secuencias que incluyas.
+```{r}
+#Longitud Sars Cov 2 USA
+print("Tamaño:")
+print(length(USA[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 India
+print(length(India[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Brazil
+print(length(Brazil[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Francia
+print(length(Francia[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Alemania
+print(length(Alemania[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 ReinoUnido
+print(length(ReinoUnido[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Rusia
+print(length(Rusia[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Sur Korea
+print(length(SurKorea[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Italia
+print(length(Italia[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Turkia 
+print(length(Turkia[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Espana 
+print(length(Espana[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Vietnam 
+print(length(Vietnam[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Argentina 
+print(length(Argentina[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Japon 
+print(length(Japon[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 PaisesBajos 
+print(length(PaisesBajos[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Iran
+print(length(Iran[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Australia
+print(length(Australia[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Colombia
+print(length(Colombia[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Indonesia 
+print(length(Indonesia[[1]]))
+```
+```{r}
+#Longitud Sars Cov 2 Polonia
+print(length(Polonia[[1]]))
+```
+
+## 3.Crea una sola gráfica donde se comparen el número de bases de ADN que componen todas las variantes del virus. 
+```{r}
+USA <- read.fasta("USA.fasta")
+India <- read.fasta("India.fasta")
+Brazil<- read.fasta("Brazil.fasta")
+Francia<- read.fasta("Francia.fasta")
+Alemania<- read.fasta("Alemania.fasta")
+ReinoUnido<- read.fasta("ReinoUnido.fasta")
+Rusia<- read.fasta("Rusia.fasta")
+SurKorea<- read.fasta("SurKorea.fasta")
+Italia<- read.fasta("Italia.fasta")
+Turkia<- read.fasta("Turkia.fasta")
+Espana<- read.fasta("Espana.fasta")
+Vietnam<- read.fasta("Vietnam.fasta")
+Argentina<- read.fasta("Argentina.fasta")
+Japon<- read.fasta("Japon.fasta")
+PaisesBajos<- read.fasta("PaisesBajos.fasta")
+Iran<- read.fasta("Iran.fasta")
+Australia <- read.fasta("Australia.fasta")
+Colombia <- read.fasta("Colombia.fasta")
+Indonesia<- read.fasta("Indonesia.fasta")
+Polonia<- read.fasta("Polonia.fasta")
+
+# Función para analizar la composición de una cadena
+porcentaje <- function(sec_ADN) {
+  n <- length(sec_ADN)
+  nA <- 0
+  nC <- 0
+  nT <- 0
+  nG <- 0
+  for (i in 1:n) {
+    nucleotido <- sec_ADN[i]
+    if (nucleotido == "a") {
+      nA <- nA + 1
+    } else if (nucleotido == "c") {
+      nC <- nC + 1
+    } else if (nucleotido == "t") {
+      nT <- nT + 1
+    } else if (nucleotido == "g") {
+      nG <- nG + 1
+    }
+  }
+  return(c(nA/n*100, nC/n*100, nT/n*100, nG/n*100))
+}
+CovidEstadosUnidos <- porcentaje(USA[[1]])
+CovidIndia <- porcentaje(India[[1]])
+CovidBrazil<- porcentaje(Brazil[[1]])
+CovidFrancia<- porcentaje(Francia[[1]])
+CovidAlemania<- porcentaje(Alemania[[1]])
+CovidReinoUnido<- porcentaje(ReinoUnido[[1]])
+CovidRusia<- porcentaje(Rusia[[1]])
+CovidSurKorea<- porcentaje(SurKorea[[1]])
+CovidItalia<- porcentaje(Italia[[1]])
+CovidTurkia<- porcentaje(Turkia[[1]])
+CovidEspana<- porcentaje(Espana[[1]])
+CovidVietnam<- porcentaje(Vietnam[[1]])
+CovidArgentina<- porcentaje(Argentina[[1]])
+CovidJapon<- porcentaje(Japon[[1]])
+CovidPaisesBajos<- porcentaje(PaisesBajos[[1]])
+CovidIran<- porcentaje(Iran[[1]])
+CovidAustralia <- porcentaje(Australia[[1]])
+CovidColombia <- porcentaje(Colombia[[1]])
+CovidIndonesia<- porcentaje(Indonesia[[1]])
+CovidPolonia<- porcentaje(Polonia[[1]])
+
+
+Bases <- c("Adenina", "Citosina", "Timina", "Guanina")
+df <- data.frame(Bases, CovidEstadosUnidos, CovidIndia,CovidBrazil,CovidFrancia,CovidAlemania,CovidReinoUnido,CovidRusia,CovidSurKorea,CovidItalia,CovidTurkia,CovidEspana,CovidVietnam,CovidArgentina,CovidJapon,CovidPaisesBajos,CovidIran,CovidAustralia,CovidColombia,CovidIndonesia,CovidPolonia)
+require(tidyr)
+df.long <- gather(df, variante,porcentajes, -Bases)
+
+ggplot(data = df.long, aes(x = Bases, y = porcentajes, fill = variante)) +
+  geom_col(position = position_dodge()) + 
+ # set axis limits in coord_cartesian
+ coord_cartesian(ylim = c(18.3, 32.2))
+```
+
+## 4.Agrega un análisis jerárquico global obtenido de las secuencias que se seleccionaron para estudiar.
+```{r}
+write.dna(virus_sequences,  file ="virus_seqs.fasta", format = "fasta", append =
+FALSE, nbcol = 6, colsep = " ", colw = 10)
+
+virus_seq_not_align <- readDNAStringSet("virus_seqs.fasta", format = "fasta")
+virus_seq_not_align <- OrientNucleotides(virus_seq_not_align)
+virus_seq_align <- AlignSeqs(virus_seq_not_align)
+
+writeXStringSet(virus_seq_align, file="virus_seq_align.fasta")
+
+virus_aligned <- read.alignment("virus_seq_align.fasta", format = "fasta")
+
+matriz_distancia <- dist.alignment(virus_aligned, matrix = "similarity")
+
+temp <- as.data.frame(as.matrix(matriz_distancia))
+
+table.paint(temp, cleg=0, clabel.row=.5, clabel.col=.5) + scale_color_viridis()
+
+virus_tree <- nj(matriz_distancia)
+class(virus_tree) 
+virus_tree <- ladderize(virus_tree)
+nombres_virus = c("sars_cov_2_USA"
+,"sars_cov_2_India "
+,"sars_cov_2_Brazil "
+,"sars_cov_2_Francia "
+,"sars_cov_2_Alemania"
+,"sars_cov_2_ReinoUnido" 
+,"sars_cov_2_Rusia "
+,"sars_cov_2_SurKorea" 
+,"sars_cov_2_Italia" 
+,"sars_cov_2_Turkia "
+,"sars_cov_2_Espana" 
+,"sars_cov_2_Vietnam "
+,"sars_cov_2_Argentina "
+,"sars_cov_2_Japon "
+,"sars_cov_2_PaisesBajos" 
+,"sars_cov_2_Iran "
+,"sars_cov_2_Australia "
+,"sars_cov_2_Colombia "
+,"sars_cov_2_Indonesia "
+,"sars_cov_2_Polonia ")
+virus_tree$tip.label = nombres_virus
+
+plot(virus_tree, cex = 0.6)
+title("Arbol de variantes del SarsCov2 por pais, 2022")
+
+
+```
+
+## 5.Agrega una interpretación escrita de tus gráficas y tus conclusiones según el caso de estudio que seleccionaste. No olvides sustentar tus argumentos con las lecturas que realizaste.
+
+```
+¿Son muy diferentes las variantes entre cada país? 
+Pues la mayoria de las variantes se centran en muy poca diferencia notable en la adenina y citosina, mientras que lo que cambia son las timinas y guaninas.
+
+Pirncipalemten la variante que tiene mas diferencia es la de Indonesia, esto prodria ser a su fecha de contagio siendo mas tardia que la de otros paises.
+
+Mientras que las otras variantes no presentan una diferencia muy grande entre si, lo que si a pesar de que no es mucha la diferencia. Las mas diferentes a las del resto, como la del reino Unido, O india, nos dan una ventana a el porque se pudieron desarrollar las variantes primero en esas locaciones geograficas.
+
+
+¿Es diferente el SARS-CoV-2 entre las diferentes poblaciones: Asiática, Hispana, Europea o Africana?
+Se nota gracias al arbol filogenetico realizado, que los coronarivurses de asia son mas cercanos a los paises europeos o del medio oriente, que a los de NorteAmerica.
+
+Mientras que los de Sudamerica son similares a los coronaviruses Asiaticos, del Sur Este Asiatico.Creo que esto se debe a que los ultimos paises que fueron prohibidos los vuelos a colombia fueron los Asiaticos, ya que exportan la mayoria de sus productos de comida a Asia.
+
+Lo que me sorprendio es que los coronaviruses de India y Estados Unidos son muy cercanos, geneticamente. Por la cual un hipotesis para cumplir con esta condicion es que la mayoria de inmigreantes americanos son de India.
+
+Mientras que hay descubrimientos trivailes, como el que los coronaviruses de Reino Unido, Alemania y Francia son cercanos. Creo que esto se debe principalemente a su proximidad geografica.
+
+Principalemente viendo estos datos, infiero que la proximidad de los coronaviruses son relacionados a los lazos de imigrantes o comerciales entre paises, entre mayor su proximidad, mayor similitud en los coronaviruses.
+```
+# 6.Recuerda incluir tus datos personales y las referencias bibliográficas de tu investigación. Sube tu entregable a la plataforma en el formato indicado. Recuerda incluir la liga de tu video en el script.
+
+## Link del video https://youtu.be/CrgcZKVsHSg
+```
+Fuentes:
+NCBI. (s. f.). SARS-CoV-2 Data Hub. NCBI Virus. Recuperado 8 de mayo de 2022, de https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=Severe%20acute%20respiratory%20syndrome%20coronavirus%202,%20taxid:2697049
+
+Worldometer. (s. f.). COVID Live - Coronavirus Statistics - Worldometer. Recuperado 8 de mayo de 2022, de https://www.worldometers.info/coronavirus/?utm_campaign=homeAdvegas1?
+
+```
+```{r}
+citation("Biostrings")
+citation("seqinr")
+citation("adegenet")
+citation("ape")
+citation("ggtree")
+citation("DECIPHER")
+citation("viridis")
+citation("ggplot2")
+```
+
+
